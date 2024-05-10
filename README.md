@@ -16,7 +16,7 @@ There are really two questions to answer here.
 
 ### Why specify an interface to quantum computers?
 
-We believe standard APIs are fundamentally useful. They allow application developers to reason about their applications, without needing to worry about the specific underlying technology. If they use the same interface, the same source code can be recompiled and rerun elsewhere, enabling code portability. This is a Good Thing:tm:.
+We believe standard APIs are fundamentally useful. They allow application developers to reason about their applications, without needing to worry about the specific underlying technology. If they use the same interface, the same source code can be recompiled and rerun elsewhere, enabling code portability. This is a Good Thing :tm:.
 
 ### Why C-like?
 
