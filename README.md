@@ -16,13 +16,17 @@ There are really two questions to answer here.
 
 ### Why specify an interface to quantum computers?
 
-We believe standard APIs are fundamentally useful. They allow application developers to reason about their applications, without needing to worry about the specific underlying technology. If they use the same interface, the same source code can be recompiled and rerun elsewhere, enabling code portability. This is a Good Thing :tm:.
+We believe standard APIs are fundamentally useful. They allow application developers to reason about their applications, without needing to worry about the specific underlying technology. If they use the same interface, the same source code can be recompiled and rerun elsewhere, enabling code portability. This is a Good Thing:tm:.
 
 ### Why C-like?
 
 Okay, so why not specify a RESTful API? That's a very good question, with a simple answer -- we're interested in the long-term view of quantum computers as tightly-coupled accelerators. For _[reasons](https://www.mpi-forum.org/)_, C and Fortran remain the ubiquitous programming languages across HPC. C++ is increasingly prevalent, especially in accelerator programming, but it's easier to access a C interface from C++ than the other way round so a C-like interface seemed to us to be the obvious starting place.
 
 This does not mean we expect everyone to program quantum computers in C. We expect CQ implementations to act as a performant intermediate layer between higher level abstractions and programming models, and lower-level QHDLs like [OpenQASM](https://openqasm.com/) and [QIR](https://www.qir-alliance.org/).
+
+## Namespace
+
+For simplicity we do not include any namespace in the specification, but in line with best practice, we encourage implementers to use approriate namespacing, i.e. `cq_` or `CQ::`.
 
 ## Structure of this Repository
 
@@ -31,3 +35,11 @@ This does not mean we expect everyone to program quantum computers in C. We expe
   - operators: Operators which act on CQ datatypes.
   - functions: Functions which act on CQ datatypes.
 - sim-ext: The CQ simulation extensions, for interfacing with classical simulations of quantum information.
+
+## References
+
+The following resources were used in the construction of CQ:
+
+- [OpenQASM](https://openqasm.com/)
+- [QIR](https://www.qir-alliance.org/)
+- [QuEST](https://quest.qtechtheory.org/)
