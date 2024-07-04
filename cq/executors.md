@@ -27,11 +27,9 @@ void ao_qrun(struct gate const * const CIRC, const size_t N, cstate * const crp,
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `N` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `N_QUBITS`-1. |
-| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `N_QUBITS`. |
+| `N` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `N`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `N`. |
 | `ehp` | `struct exec *` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
-
-TODO: add struct exec * to datatypes and create (de)allocator.
 
 ### Synchronous multi-shot forward execution on default backend
 
