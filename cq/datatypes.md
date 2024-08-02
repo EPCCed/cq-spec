@@ -12,6 +12,8 @@
 
 ## Compound datatypes
 
+Note that implementers may wish to extend these compound datatypes, but ideally they should not reduce them.
+
 ### Gate struct
 
 The gate struct is primarily intended to store the details of a specific instance of a **quantum** gate, to enable the creation of datastructures representing quantum circuits. It combines a reference to the functional description of a gate, and parameters required for that function.
