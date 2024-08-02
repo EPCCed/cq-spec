@@ -22,8 +22,10 @@ The gate struct is primarily intended to store the details of a specific instanc
 ```C
 struct gate {
   gate_id id;
-  qubit * qp;
-  size_t n_qubits;
+  qubit * targets;
+  size_t n_targets;
+  qubit * controls;
+  size_t n_controls;
   complex double * params;
   size_t n_params;
 }
@@ -32,9 +34,11 @@ struct gate {
 | Member | Datatype | Notes |
 | ------ | -------- | ----- |
 | id     | `gate_id` | A reference to the functional description of the gate. |
-| qp     | `qubit *` | Classical handle for one or more qubits, to which the gate should be applied. Order should match the order of formal parameters in the interface specified by `gate_id`. |
-| n_qubits | `size_t` | The number of qubits to which the gate applies. Should be equal to `sizeof(qp)/sizeof(qubit)`. |
-| params | `complex double *` | Parameters for the gate i.e. rotation angles. Order should match the order of formal parameters in the interface specified by `gate_id`. |
+| targets | `qubit *` | Classical handle for one or more qubits, to which the gate should be applied. |
+| n_targets | `size_t` | The number of qubits to which the gate applies. Should be equal to `sizeof(targets)/sizeof(qubit)`. |
+| controls | `qubit *` | Classical handle for zero or more qubits which act as controls for the gate that should be applied. |
+| n_controls | `size_t` | The number of qubits by which the gate is controlled. Should be equal to `sizeof(controls)/sizeof(qubit)`. |
+| params | `complex double *` | Parameters for the gate i.e. rotation angles. |
 | n_params | `size_t` | The number of parameters. Should be equal to `sizeof(params)/sizeof(size_t)`. |
 
 ### Execution handle struct
