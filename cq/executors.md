@@ -2,115 +2,123 @@
 
 These functions instruct the backend to execute a given quantum gate or circuit. What that actually means is, naturally, an implementation detail. 
 
-### Synchronous one-shot forward execution on default backend
+## Key
 
-This function is _synchronous_ so it does not return until the circuit has been run, and the outcome measured and returned to host.
+| Letter Code | Meaning |
+| ---- | ---- |
+| `s` | _Synchronous_. This function does not return until execution is complete, and the output buffer has been filled. |
+| `a` | _Asynchronous_. This function returns immediately. The output buffer should not be accessed unless it has been explicitly synchronised. |
+| `m` | _Multi-shot_. This function executes the circuit multiple times on the backend, and returns all results. |
+| `b` | _Backend_. The backend the circuit should execute on is specified in this function. |
+
+## Signatures
+
+### Synchronous one-shot execution on default backend
 
 ```C
-void so_qrun(struct gate const * const CIRC, const size_t N, cstate * const crp);
+void s_qrun(struct gate const * const CIRC, const size_t NQUBITS, cstate * const crp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `N` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `N_QUBITS`-1. |
-| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `N_QUBITS`.
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
 
-### Asynchronous one-shot forward execution on default backend
-
-This function is _asynchronous_ so it returns immediately. The classical register which holds the measurement outcome for the circuit can only safely be accessed once the executor handle is waited on.
+### Asynchronous one-shot execution on default backend
 
 ```C
-void ao_qrun(struct gate const * const CIRC, const size_t N, cstate * const crp, handle * ehp);
+void a_qrun(struct gate const * const CIRC, const size_t NQUBITS, cstate * const crp, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `N` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `N`-1. |
-| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `N`. |
-| `ehp` | `struct exec *` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
 
-### Synchronous multi-shot forward execution on default backend
-
-```C
-void sm_qrun()
-```
-
-### Asynchronous multi-shot forward execution on default backend
+### Synchronous multi-shot execution on default backend
 
 ```C
-void am_qrun()
+void sm_qrun(struct gate const * const CIRC, const size_t NQUBITS, const size_t NSHOTS, cstate * const crp);
 ```
 
-### Synchronous one-shot reverse execution on default backend
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+
+### Asynchronous multi-shot execution on default backend
 
 ```C
-void sor_qrun()
+void am_qrun(struct gate const * const CIRC, const size_t NQUBITS, const size_t NSHOTS, cstate * const crp, struct exec * const ehp);
 ```
 
-### Asynchronous one-shot reverse execution on default backend
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+
+### Synchronous one-shot execution on specified backend
 
 ```C
-void aor_qrun()
+void sb_qrun(struct gate const * const CIRC, const size_t NQUBITS, const backend_id BE, cstate * const crp);
 ```
 
-### Synchronous multi-shot reverse execution on default backend
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+
+### Asynchronous one-shot execution on specified backend
 
 ```C
-void smr_qrun()
+void ab_qrun(struct gate const * const CIRC, const size_t NQUBITS, const backend_id BE, cstate * const crp, struct exec * const ehp);
 ```
 
-### Asynchronous multi-shot reverse execution on default backend
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+
+### Synchronous multi-shot execution on specified backend
 
 ```C
-void amr_qrun()
+void smb_qrun(struct gate const * const CIRC, const size_t NQUBITS, const size_t NSHOTS, const backend_id BE, cstate * const crp);
 ```
 
-### Synchronous one-shot forward execution on specified backend
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+
+
+### Asynchronous multi-shot execution on specified backend
 
 ```C
-void sob_qrun()
+void amb_qrun(struct gate const * const CIRC, const size_t NQUBITS, const size_t NSHOTS, const backend_id BE, cstate * const crp, struct exec * const ehp);
 ```
 
-### Asynchronous one-shot forward execution on specified backend
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
+| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
 
-```C
-void aob_qrun()
-```
-
-### Synchronous multi-shot forward execution on specified backend
-
-```C
-void smb_qrun()
-```
-
-### Asynchronous multi-shot forward execution on specified backend
-
-```C
-void amb_qrun()
-```
-
-### Synchronous one-shot reverse execution on specified backend
-
-```C
-void sorb_qrun()
-```
-
-### Asynchronous one-shot reverse execution on specified backend
-
-```C
-void aorb_qrun()
-```
-
-### Synchronous multi-shot reverse execution on specified backend
-
-```C
-void smrb_qrun()
-```
-
-### Asynchronous multi-shot reverse execution on specified backend
-
-```C
-void amrb_qrun()
-```
