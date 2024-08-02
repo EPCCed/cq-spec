@@ -7,7 +7,8 @@
 | -------- | ----------- | -------------------- |
 | `qubit`    | Classical handle for a **quantum** resource. A single qubit. |  Not guaranteed to be valid until handle is passed to an allocator function. Handles should be unique. |
 | `cstate`  | Datatype capable of holding the outcome of measuring a single qubit - a classical state. | Trivially implemented as a bool. |
-| `gate_id`  | Handle for a speccific _type_ of quantum gate, i.e. Hadamard. | Could be a function pointer, or an map key. | 
+| `gate_id`  | Handle for a specific _type_ of quantum gate, i.e. Hadamard. | Could be a function pointer, or a map key. |
+| `backend_id` | Handle for a specific backend in quantum-heterogeneous environments. | Could be an unsigned int, or a map key. |
 
 
 ## Compound datatypes
