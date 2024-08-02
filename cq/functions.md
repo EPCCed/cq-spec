@@ -70,4 +70,69 @@ void set_qureg(qubit * qrp, cstate * crp, size_t N);
 
 ## Gates 
 
+These functions prepare gate structs to represent specific quantum gates. The gates specified here match those in the [OpenQASM Standard Library](https://openqasm.com/language/standard_library.html#standard-library).
+
+### Identity
+
+```C
+void id(const qubit TARGET, struct gate * gp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `TARGET` | `const qubit` | In | The target to which the identity operation should be applied. |
+| `gp` | `struct gate *` | Out | Pointer to the gate struct which will be modified to represent the identity operation. |
+
+### U Gate
+
+### Phase Gate
+
+### Pauli X
+
+### Pauli Y
+
+### Pauli Z
+
+### Hadamard
+
+### S Gate
+
+### Adjoint S Gate
+
+### T Gate
+
+### Adjoint T Gate
+
+### SX Gate
+
+### X Rotation
+
+### Y Rotation
+
+### Z Rotation
+
+### Controlled X
+
+### Controlled Y
+
+### Controlled Z
+
+### Controlled Phase
+
+### Controlled X Rotation
+
+### Controlled Y Rotation
+
+### Controlled Z Rotation
+
+### Controlled Hadamard
+
+### Controlled U Gate
+
+### Swap
+
+### Double Controlled X
+
+### Controlled Swap
+
 ## Observations
