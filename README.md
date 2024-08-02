@@ -8,8 +8,6 @@ CQ is a specification for a C-like interface to quantum computers. It is _not_ a
 
 Although the interface is C-like, we don't insist that implementations are written in C. You could certainly write a compatible implementation in C++, or even in python or Fortran (if you must).
 
-CQ is an open specification, and contributions are welcomed. For more details see the [contribution guidelines](CONTRIBUTING.md).
-
 ## Why?
 
 There are really two questions to answer here.
@@ -32,9 +30,19 @@ For simplicity we do not include any namespace in the specification, but in line
 
 - cq: The core CQ specification, for interfacing with quantum hardware.
   - datatypes: Basic and complex datatypes which should be provided by a CQ implementation.
+  - executors: Functions which offload quantum computations.
   - operators: Operators which act on CQ datatypes.
   - functions: Functions which act on CQ datatypes.
-- sim-ext: The CQ simulation extensions, for interfacing with classical simulations of quantum information.
+
+## Roadmap
+
+We plan to add at least one reference implementation to this repository, possibly in the form of C-based QASM writer.
+
+We currently foresee the following CQ extensions:
+
+- cq-emulation: An extension for routines that are only applicable when emulating a quantum computer, rather than using a real one. For instance allowing direct access to amplitudes.
+- cq-analogue: An extension for dealing with analogue rather than digital quantum computers.
+- cq-algorithms: An extension for higher-level functionality.
 
 ## References
 
