@@ -31,7 +31,6 @@ For simplicity we do not include any namespace in the specification, but in line
 - cq: The core CQ specification, for interfacing with quantum hardware.
   - datatypes: Basic and complex datatypes which should be provided by a CQ implementation.
   - executors: Functions which offload quantum computations.
-  - operators: Operators which act on CQ datatypes.
   - functions: Functions which act on CQ datatypes.
 
 ## Roadmap
