@@ -1,4 +1,4 @@
-# CQ functions
+# CQ quantum operations
 
 ## Resource management
 
@@ -134,5 +134,3 @@ void id(const qubit TARGET, struct gate * gp);
 ### Double Controlled X
 
 ### Controlled Swap
-
-## Observations
