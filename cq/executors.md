@@ -130,3 +130,30 @@ void amb_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t 
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
 | `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
 
+
+## Synchronisation
+
+## Immediately synchronise execution
+
+This function immediately synchronises an execution, including any classical data which may have already been produced. For example, if on return of `sync_qrun` the number of completed shots is 3, then the first `3 * NQUBITS` entries of the `cstate` array supplied to the executor should contain valid data on the _host_.
+
+```C
+void sync_qrun(struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `ehp`     | `struct exec * const` | Out | A pointer to a CQ execution handle. On return of the function the handle struct _and_ related `cstate` arrays will be synchronised between device and host. |
+
+
+## Wait until execution completes
+
+This function returns only when the device has completed execution. The execution handle and related `cstate` arrays are guaranteed to be synchronised to the host on return of this function.
+
+```C
+void wait_qrun(struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `ehp`     | `struct exec * const` | Out | A pointer to a CQ execution handle. On return of the function the handle struct _and_ related `cstate` arrays will be synchronised between device and host. This function also guarantees that the execution on the device has completed, but it _does not_ guarantee successful completion. |
