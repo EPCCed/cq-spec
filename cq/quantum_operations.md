@@ -1,26 +1,8 @@
 # CQ quantum operations
 
+Quantum operations are valid _within_ a quantum kernel.
+
 ## Resource management
-
-### Allocate qubit
-
-```C
-void alloc_qubit(qubit * qhp);
-```
-
-| Parameter | Datatype | In/Out | Notes |
-| --------- | -------- | ------ | ----- |
-| `qhp`      | `qubit *` | Out | On return of this function the memory location pointed to by `qp` should contain a valid and unique `qubit` handle.
-
-### Deallocate qubit
-
-```C
-void free_qubit(qubit * qhp);
-```
-
-| Parameter | Datatype | In/Out | Notes |
-| --------- | -------- | ------ | ----- |
-| `qhp`      | `qubit *` | Out | On return of this function the memory location pointed to by `qp` should _not_ contain a valid `qubit` handle. |
 
 ### Set qubit
 
@@ -32,41 +14,58 @@ void set_qubit(qubit qh, cstate cs);
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qh`      | `qubit`  | In     | Handle to the qubit which is to be prepared in a classical state. |
+| `qh`      | `qubit`  | Out     | Handle to the qubit which is to be prepared in a classical state. |
 | `cs`      | `cstate` | In     | The classical state in which the qubit is to be prepared. |
 
-### Allocate qubit register
+### Set qubit register using unsigned integer
 
 ```C
-void alloc_qureg(qubit * qrp, size_t N);
+void set_qureg(const unsigned long long STATE_IDX, const size_t N, qubit * qrp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qrp`     | `qubit *`| Out    | On return of this function the memory location pointed to by `qrp` should contain _N_ valid `qubit` handles in an array. |
-| `N`       | `size_t` | In     | This function should allocate valid and unique handles for `N` qubits. |
+| `STATE_IDX` | `const unsigned long long` | In | Converted to an `N`-bit binary number, which is then used to set the qubit register. |
+| `N`       | `const size_t` | In | The number of qubits in `qrp`. Should be equal `sizeof(qrp)/sizeof(qubit)`. |
+| `qrp`     | `qubit * ` | Out    | The qubit register which should be prepared in a classical state. |
 
-### Deallocate qubit register
+### Set qubit register using cstate
 
 ```C
-void free_qureg(qubit * qrp);
+void set_qureg_cstate(cstate const * const CRP, const size_t N, qubit * qrp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qrp`      | `qubit *` | Out | On return of this function the memory location pointed to by `qrp` should not contain any valid qubit handles, and any held resources should have been released.
+| `CRP`     | `cstate const * const` | In   | An array of classical states in which the quantum register should be prepared. |
+| `N`       | `const size_t` | In     | The number of qubits in `qrp` and classical states in `CRP`. Should be equal to `sizeof(qrp)/sizeof(qubit)` _and_ `sizeof(crp)/sizeof(cstate)`. |
+| `qrp`     | `qubit * ` | Out    | The qubit register which should be prepared in a classical state. |
 
-### Set qubit register
+
+## Control
+
+### Abort
+
+Forces the quantum device to cease execution and return to the host.
 
 ```C
-void set_qureg(qubit * qrp, cstate * crp, size_t N);
+void abort(const unsigned int STATUS);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qrp`     | `qubit *` | In    | The qubit register which should be prepared in a classical state. |
-| `crp`     | `cstate *` | In   | An array of classical states in which the quantum register should be prepared. |
-| `N`       | `size_t` | In     | The number of qubits in `qrp` and classical states in `crp`. Should be equal to `sizeof(qrp)/sizeof(qubit)` _and_ `sizeof(crp)/sizeof(cstate)`. |
+| `STATUS`  | `const unsigned int` | In | Should be used to set the the `qdev_status` field of the execution handle. |
+
+
+## Measurements
+
+### Mid-circuit measurement
+
+The results of mid-circuit measurements can be used by the **quantum** device, but are _not_ synchronised back to the host.
+
+### End-circuit measurement
+
+The results of end-circuit measurements are stored in `cstate` buffers passed to the executor, and will be synchronised back to the host.
 
 ## Gates 
 

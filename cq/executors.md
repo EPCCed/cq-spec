@@ -16,84 +16,84 @@ These functions instruct the backend to execute a given quantum gate or circuit.
 ### Synchronous one-shot execution on default backend
 
 ```C
-void s_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, cstate * const crp);
+void s_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
 
 ### Asynchronous one-shot execution on default backend
 
 ```C
-void a_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, cstate * const crp, struct exec * const ehp);
+void a_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
 | `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
 
 ### Synchronous multi-shot execution on default backend
 
 ```C
-void sm_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, const size_t NSHOTS, cstate * const crp);
+void sm_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
-| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
 
 ### Asynchronous multi-shot execution on default backend
 
 ```C
-void am_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, const size_t NSHOTS, cstate * const crp, struct exec * const ehp);
+void am_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
-| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
 | `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
 
 ### Synchronous one-shot execution on specified backend
 
 ```C
-void sb_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, const backend_id BE, cstate * const crp);
+void sb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
-| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
 
 ### Asynchronous one-shot execution on specified backend
 
 ```C
-void ab_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, const backend_id BE, cstate * const crp, struct exec * const ehp);
+void ab_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
 | `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
 | `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
@@ -101,33 +101,33 @@ void ab_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t N
 ### Synchronous multi-shot execution on specified backend
 
 ```C
-void smb_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, const size_t NSHOTS, const backend_id BE, cstate * const crp);
+void smb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
 | `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
 | `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
-| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
 
 
 ### Asynchronous multi-shot execution on specified backend
 
 ```C
-void amb_qrun(struct gate const * const CIRC, const size_t NGATES, const size_t NQUBITS, const size_t NSHOTS, const backend_id BE, cstate * const crp, struct exec * const ehp);
+void amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `CIRC` | `struct gate const * const` | In | A read-only array of gates, constituting a **quantum** circuit. |
-| `NGATES` | `const size_t` | In | The total number of gates to be applied, should match the size of `CIRC`. |
-| `NQUBITS` | `const size_t` | In | The total width of `CIRCUIT`. Highest qubit index is `NQUBITS`-1. |
+| `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
 | `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
 | `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
-| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
 | `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
 
 
