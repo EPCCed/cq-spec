@@ -193,7 +193,7 @@ void amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 
 ## Synchronisation
 
-## Immediately synchronise execution
+### Immediately synchronise execution
 
 This function immediately synchronises an execution, including any classical data which may have already been produced. For example, if on return of `sync_qrun` the number of completed shots is 3, then the first `3 * NQUBITS` entries of the `cstate` array supplied to the executor should contain valid data on the _host_.
 
@@ -206,7 +206,7 @@ void sync_qrun(struct exec * const ehp);
 | `ehp`     | `struct exec * const` | Out | A pointer to a CQ execution handle. On return of the function the handle struct _and_ related `cstate` arrays will be synchronised between device and host. |
 
 
-## Wait until execution completes
+### Wait until execution completes
 
 This function returns only when the device has completed execution. The execution handle and related `cstate` arrays are guaranteed to be synchronised to the host on return of this function.
 
@@ -217,3 +217,12 @@ void wait_qrun(struct exec * const ehp);
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `ehp`     | `struct exec * const` | Out | A pointer to a CQ execution handle. On return of the function the handle struct _and_ related `cstate` arrays will be synchronised between device and host. This function also guarantees that the execution on the device has completed, but it _does not_ guarantee successful completion. |
+
+### Synchronise and end execution
+
+```C
+void halt_qrun(struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| `ehp`     | `struct exec * const` | Out | A pointer to a CQ execution handle. On return of the function the handle struct _and_ related `cstate` arrays will be synchronised between device and host. This function also guarantees that the execution on the device had completed. It will attempt to actively end execution rather than waiting for completion. |
