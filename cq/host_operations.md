@@ -59,10 +59,23 @@ void register_qkern(qkern kernel);
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `qkern`  | In     | Should point to a valid quantum kernel. Quantum kernels should _only_ contain quantum operations. |
 
+### Register parameterised quantum kernel
+
+This function provides a hook for implementers to ensure that the parameterised quantum kernel can be accessed by the **quantum** device.
+
+```C
+void register_pqkern(pqkern pkernel);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `pkernel`  | `pqkern`  | In     | Should point to a valid parameterised quantum kernel. Quantum kernels should _only_ contain quantum operations. The paramaterised quantum kernel should accept a `struct qkern_parameters` as an argument. |
+
+
 
 ## Executors
 
-These functions instruct the backend to execute a given quantum gate or circuit. What that actually means is, naturally, an implementation detail. 
+These functions instruct the backend to execute a given quantum kernel. What that actually means is, naturally, an implementation detail. 
 
 ### Key
 
@@ -70,8 +83,9 @@ These functions instruct the backend to execute a given quantum gate or circuit.
 | ---- | ---- |
 | `s` | _Synchronous_. This function does not return until execution is complete, and the output buffer has been filled. |
 | `a` | _Asynchronous_. This function returns immediately. The output buffer should not be accessed unless it has been explicitly synchronised. |
-| `m` | _Multi-shot_. This function executes the circuit multiple times on the backend, and returns all results. |
-| `b` | _Backend_. The backend the circuit should execute on is specified in this function. |
+| `m` | _Multi-shot_. This function executes the quantum kernel multiple times on the backend, and returns all results. |
+| `b` | _Backend_. The backend the quantum kernel should execute on is specified in this function. |
+| `p` | _Parameterised_. The quantum kernel is parameterised, so this executor accepts a `pqkern`. |
 
 ### Synchronous one-shot execution on default backend
 
@@ -183,6 +197,123 @@ void amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `qkern`  | In | A function pointer to the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+
+### Synchronous one-shot parameterised execution on default backend
+
+```C
+void sp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern` | In | A function pointer to the parameterised quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+
+### Asynchronous one-shot parameterised execution on default backend
+
+```C
+void ap_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+
+### Synchronous multi-shot parameterised execution on default backend
+
+```C
+void smp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NQUBITS * NSHOTS`. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the kernel to be executed. |
+
+### Asynchronous multi-shot parameterised execution on default backend
+
+```C
+void amp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS, struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+
+### Synchronous one-shot parameterised execution on specified backend
+
+```C
+void sbp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const backend_id BE);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+
+### Asynchronous one-shot parameterised execution on specified backend
+
+```C
+void abp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const backend_id BE, struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS`. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+| `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the circuit has been executed on the **quantum** device, and the measurement outcome returned to the host. |
+
+### Synchronous multi-shot parameterised execution on specified backend
+
+```C
+void smb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS, const backend_id BE);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to parameterised the quantum kernel to be executed. |
+| `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
+| `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
+| `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
+| `NSHOTS` | `const size_t` | In | The total number of repetitions of the circuit to be executed. |
+| `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
+
+
+### Asynchronous multi-shot parameterised execution on specified backend
+
+```C
+void amb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the circuit. Array size should match `NQUBITS * NSHOTS`. |
