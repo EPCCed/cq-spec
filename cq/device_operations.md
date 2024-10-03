@@ -1,6 +1,6 @@
-# CQ quantum operations
+# CQ device operations
 
-Quantum operations are valid _within_ a quantum kernel.
+Device operations are valid _within_ a quantum kernel.
 
 ## Resource management
 
@@ -59,32 +59,98 @@ void abort(const unsigned int STATUS);
 
 ## Measurements
 
-### Mid-circuit measurement
+### Device measurement
 
-The results of mid-circuit measurements can be used by the **quantum** device, but are _not_ synchronised back to the host.
+The results of device measurements can be used by the **quantum** device, but are _not_ synchronised back to the host.
 
-### End-circuit measurement
+### Qubit measurement
 
-The results of end-circuit measurements are stored in `cstate` buffers passed to the executor, and will be synchronised back to the host.
+```C
+void dmeasure_qubit(qubit * qbp, cstate * csp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `qbp`     | `qubit *` | Out   | Handle for the qubit which will be measured. |
+| `csp`     | `cstate *` | Out  | Handle for the `cstate` buffer which will hold the measurement result. |
+
+### Full qubit register measurement
+
+```C
+void dmeasure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `qr`      | `qubit *` | Out   | Handle for the quantum register which will be measured. |
+| `NQUBITS` | `const size_t` | In | The number of qubits in `qr`. |
+| `cr`      | `cstate *` | Out | Handle for the `cstate` buffer which will hold the measurement results. |
+
+### Partial qubit register measurement
+
+```C
+void dmeasure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, const size_t NTARGETS, cstate * cr);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `qr`      | `qubit *` | Out   | Handle for the quantum register which holds qubits that will be measured. |
+| `NQUBITS` | `const size_t` | In | The number of qubits in `qr`. |
+| `TARGETS` | `size_t const * const` | In | The indices of the qubits in `qr` which will be measured. Should be `NTARGETS` long. |
+| `NTARGETS` | `const size_t` | In | The number of measurement targets. Should be the size of `cr` and `TARGETS`. |
+| `cr`      | `cstate *` | Out | Handle for the `cstate` buffer which will hold the measurement results. Should be at least large enough to hold `NTARGETS` results. |
+
+### Host measurement
+
+The results of end-circuit measurements are stored in `cstate` buffers passed to the executor, and will be synchronised back to the host. Note that passing in the result buffer to these functions allows the programmer to determine _where_ in the buffer results are stored.
+
+### Qubit measurement
+
+```C
+void measure_qubit(qubit * qbp, cstate * csp);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `qbp`     | `qubit *` | Out   | Handle for the qubit which will be measured. |
+| `csp`     | `cstate *` | Out  | Handle for the `cstate` buffer which will hold the measurement result. |
+
+### Full qubit register measurement
+
+```C
+void measure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `qr`      | `qubit *` | Out   | Handle for the quantum register which will be measured. |
+| `NQUBITS` | `const size_t` | In | The number of qubits in `qr`. |
+| `cr`      | `cstate *` | Out | Handle for the `cstate` buffer which will hold the measurement results. |
+
+### Partial qubit register measurement
+
+```C
+void measure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, const size_t NTARGETS, cstate * cr);
+```
+
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `qr`      | `qubit *` | Out   | Handle for the quantum register which holds qubits that will be measured. |
+| `NQUBITS` | `const size_t` | In | The number of qubits in `qr`. |
+| `TARGETS` | `size_t const * const` | In | The indices of the qubits in `qr` which will be measured. Should be `NTARGETS` long. |
+| `NTARGETS` | `const size_t` | In | The number of measurement targets. Should be the size of `cr` and `TARGETS`. |
+| `cr`      | `cstate *` | Out | Handle for the `cstate` buffer which will hold the measurement results. Should be at least large enough to hold `NTARGETS` results. |
 
 ## Gates 
 
 These functions prepare gate structs to represent specific quantum gates. The gates specified here match those in the [OpenQASM Standard Library](https://openqasm.com/language/standard_library.html#standard-library).
 
-### Identity
+### Phase Gate
 
 ```C
-void id(const qubit TARGET, struct gate * gp);
+void phase(const size_t TARGET, const double ANGLE);
 ```
 
-| Parameter | Datatype | In/Out | Notes |
-| --------- | -------- | ------ | ----- |
-| `TARGET` | `const qubit` | In | The target to which the identity operation should be applied. |
-| `gp` | `struct gate *` | Out | Pointer to the gate struct which will be modified to represent the identity operation. |
-
-### U Gate
-
-### Phase Gate
 
 ### Pauli X
 
