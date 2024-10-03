@@ -102,7 +102,7 @@ void dmeasure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, co
 
 ### Host measurement
 
-The results of end-circuit measurements are stored in `cstate` buffers passed to the executor, and will be synchronised back to the host. Note that passing in the result buffer to these functions allows the programmer to determine _where_ in the buffer results are stored.
+The results of host measurements are stored in `cstate` buffers passed to the executor, and will be synchronised back to the host. Note that passing in the result buffer to these functions allows the programmer to determine _where_ in the buffer results are stored.
 
 ### Qubit measurement
 

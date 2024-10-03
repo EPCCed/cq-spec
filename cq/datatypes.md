@@ -18,7 +18,7 @@ Note that implementers may wish to extend these compound datatypes, but ideally 
 
 ### Execution handle struct
 
-The execution handle struct is intended to store the status of an execution of a circuit on a **quantum** device. It can be used to check when the cstate buffer is full, or partially full, and also to return status codes from the **quantum** device. Note that this struct should be a shared datastructure between the host and the classical co-processor of the **quantum** device, and depending on implementation _may_ need to be explicitly synchronised by the user.  
+The execution handle struct is intended to store the status of an execution of a kernel on a **quantum** device. It can be used to check when the cstate buffer is full, or partially full, and also to return status codes from the **quantum** device. Note that this struct should be a shared datastructure between the host and the classical co-processor of the **quantum** device, and depending on implementation _may_ need to be explicitly synchronised by the user.  
 
 ```C
 struct exec {
