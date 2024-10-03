@@ -7,7 +7,6 @@
 | -------- | ----------- | -------------------- |
 | `qubit`    | Classical handle for a **quantum** resource. A single qubit. |  Not guaranteed to be valid until handle is passed to an allocator function. Handles should be unique. |
 | `cstate`  | Datatype capable of holding the outcome of measuring a single qubit - a classical state. | Trivially implemented as a bool, _however_ it is very useful to use a type that can also represent an unset state. |
-| `gate_id`  | Handle for a specific _type_ of quantum gate, i.e. Hadamard. | Could be a map key. |
 | `backend_id` | Handle for a specific backend in quantum-heterogeneous environments. | Could be an unsigned int, or a map key. |
 | `qkern` | Function pointer to a quantum kernel. The specific signature of a quantum kernel is left as an implementation detail, but valid quantum kernels should be fully executable on the _device_. |
 
