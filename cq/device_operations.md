@@ -145,36 +145,284 @@ void measure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, con
 
 These functions prepare gate structs to represent specific quantum gates. The gates specified here match those in the [OpenQASM Standard Library](https://openqasm.com/language/standard_library.html#standard-library).
 
-### Phase Gate
+### U Gate
 
-```C
-void phase(const size_t TARGET, const double ANGLE);
+```math
+U(\theta, \phi, \lambda) = \frac{1}{2}
+\begin{pmatrix}
+  1 + \exp{(i\theta)} & -i\exp{(i\lambda)}(1+\exp{(i\theta)}) \\
+  i\exp{(i\phi)}(1-\exp{(i\theta)}) & \exp{(i(\phi + \lambda))}(1+\exp{(i\theta)})
+\end{pmatrix}
 ```
 
+```C
+void unitary(qubit * qh, const double THETA, const double PHI, const double LAMBDA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+| `THETA` | `const double` | The angle of the phase, $\theta$. |
+| `PHI` | `const double` | The angle of the phase, $\phi$. |
+| `LAMBDA` | `const double` | The angle of the phase, $\lambda$. |
+
+### Global Phase Gate
+
+```math
+G(\theta) =
+\begin{pmatrix}
+  \exp{(i\theta)} & 0 \\
+  0 & \exp{(i\theta)}
+\end{pmatrix}
+```
+
+```C
+void gphase(qubit * qh, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+| `THETA` | `const double` | The angle of the phase, $\theta$. |
+
+### Phase Gate
+
+```math
+P(\theta) = 
+\begin{pmatrix}
+  1 & 0 \\
+  0 & \exp{(i\theta)}
+\end{pmatrix}
+```
+
+```C
+void phase(qubit * qh, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+| `THETA` | `const double` | The angle of the phase, $\theta$. |
 
 ### Pauli X
 
+```math
+\sigma_{x} =
+\begin{pmatrix}
+  0 & 1 \\
+  1 & 0
+\end{pmatrix}
+```
+
+```C
+void paulix(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+
 ### Pauli Y
+
+```math
+\sigma_{y} =
+\begin{pmatrix}
+  0 & i \\
+  -i & 0
+\end{pmatrix}
+```
+
+```C
+void pauliy(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
 
 ### Pauli Z
 
+```math
+\sigma_{z} =
+\begin{pmatrix}
+  1 & 0 \\
+  0 & -1
+\end{pmatrix}
+```
+
+```C
+void pauliz(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+
 ### Hadamard
+
+```math
+H = \frac{1}{\sqrt{2}}
+\begin{pmatrix}
+  1 & 1 \\
+  1 & -1
+\end{pmatrix}
+```
+
+```C
+void hadamard(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
 
 ### S Gate
 
+```math
+S =
+\begin{pmatrix}
+  1 & 0 \\
+  0 & i
+\end{pmatrix}
+```
+
+```C
+void sqrtz(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+
 ### Adjoint S Gate
+
+```math
+S^{\dagger} =
+\begin{pmatrix}
+  1 & 0 \\
+  0 & -i
+\end{pmatrix}
+```
+
+```C
+void sqrtzhc(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
 
 ### T Gate
 
+```math
+T =
+\begin{pmatrix}
+  1 & 0 \\
+  0 & \frac{1}{\sqrt{2}}(1 + i)
+\end{pmatrix}
+```
+
+```C
+void sqrts(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+
 ### Adjoint T Gate
+
+```math
+T^{\dagger} =
+\begin{pmatrix}
+  1 & 0 \\
+  0 & \frac{1}{\sqrt{2}}(1 - i)
+\end{pmatrix}
+```
+
+```C
+void sqrtshc(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
 
 ### SX Gate
 
+```math
+SX = \frac{1}{2}
+\begin{pmatrix}
+  1 + i & 1 - i \\
+  1 - i & 1 + i
+\end{pmatrix}
+```
+
+```C
+void sqrtx(qubit * qh);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+
 ### X Rotation
+
+```math
+R_{x}(\theta) =
+\begin{pmatrix}
+  \cos{(\theta/2)} & -i\sin{(\theta/2)} \\
+  -i\sin{(\theta/2)} & \cos{(\theta/2)}
+\end{pmatrix}
+```
+
+```C
+void rotx(qubit * qh, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+| `THETA` | `const double` | The angle of the rotation, $\theta$. |
 
 ### Y Rotation
 
+```math
+R_{y}(\theta) =
+\begin{pmatrix}
+  \cos{(\theta/2)} & -\sin{(\theta/2)} \\
+  \sin{(\theta/2)} & \cos{(\theta/2)}
+\end{pmatrix}
+```
+
+```C
+void roty(qubit * qh, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+| `THETA` | `const double` | The angle of the rotation, $\theta$. |
+
+
 ### Z Rotation
+
+```math
+R_{z}(\theta) =
+\begin{pmatrix}
+  \exp{(-i\theta/2)} & 0 \\
+  0 & \exp{(i\theta/2)}
+\end{pmatrix}
+```
+
+```C
+void rotz(qubit * qh, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `qh`      | `qubit *` | The qubit to which the gate is applied. |
+| `THETA` | `const double` | The angle of the rotation, $\theta$. |
 
 ### Controlled X
 
