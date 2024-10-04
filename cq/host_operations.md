@@ -1,6 +1,6 @@
 # CQ host operations
 
-Operations which are valid on the host, but not the device.
+Operations which are valid on the host, but not the device. Implementers are encouraged to use the return values for error handling.
 
 ## Resource management
 
@@ -9,7 +9,7 @@ Operations which manage resources which are shared between host and device.
 ### Allocate qubit
 
 ```C
-void alloc_qubit(qubit * qhp);
+int alloc_qubit(qubit * qhp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -19,7 +19,7 @@ void alloc_qubit(qubit * qhp);
 ### Deallocate qubit
 
 ```C
-void free_qubit(qubit * qhp);
+int free_qubit(qubit * qhp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -29,7 +29,7 @@ void free_qubit(qubit * qhp);
 ### Allocate qubit register
 
 ```C
-void alloc_qureg(qubit * qrp, size_t N);
+int alloc_qureg(qubit * qrp, size_t N);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -40,7 +40,7 @@ void alloc_qureg(qubit * qrp, size_t N);
 ### Deallocate qubit register
 
 ```C
-void free_qureg(qubit * qrp);
+int free_qureg(qubit * qrp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -52,7 +52,7 @@ void free_qureg(qubit * qrp);
 This function provides a hook for implementers to ensure that the quantum kernel can be accessed by the **quantum** device.
 
 ```C
-void register_qkern(qkern kernel);
+int register_qkern(qkern kernel);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -64,7 +64,7 @@ void register_qkern(qkern kernel);
 This function provides a hook for implementers to ensure that the parameterised quantum kernel can be accessed by the **quantum** device.
 
 ```C
-void register_pqkern(pqkern pkernel);
+int register_pqkern(pqkern pkernel);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -90,7 +90,7 @@ These functions instruct the backend to execute a given quantum kernel. What tha
 ### Synchronous one-shot execution on default backend
 
 ```C
-void s_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE);
+int s_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -104,7 +104,7 @@ void s_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp,
 ### Asynchronous one-shot execution on default backend
 
 ```C
-void a_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, struct exec * const ehp);
+int a_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -119,7 +119,7 @@ void a_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp,
 ### Synchronous multi-shot execution on default backend
 
 ```C
-void sm_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS);
+int sm_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -134,7 +134,7 @@ void sm_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp
 ### Asynchronous multi-shot execution on default backend
 
 ```C
-void am_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, struct exec * const ehp);
+int am_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -150,7 +150,7 @@ void am_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp
 ### Synchronous one-shot execution on specified backend
 
 ```C
-void sb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE);
+int sb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -165,7 +165,7 @@ void sb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp
 ### Asynchronous one-shot execution on specified backend
 
 ```C
-void ab_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE, struct exec * const ehp);
+int ab_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -181,7 +181,7 @@ void ab_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp
 ### Synchronous multi-shot execution on specified backend
 
 ```C
-void smb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
+int smb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -198,7 +198,7 @@ void smb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 ### Asynchronous multi-shot execution on specified backend
 
 ```C
-void amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
+int amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -215,7 +215,7 @@ void amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 ### Synchronous one-shot parameterised execution on default backend
 
 ```C
-void sp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE);
+int sp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -229,7 +229,7 @@ void sp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 ### Asynchronous one-shot parameterised execution on default backend
 
 ```C
-void ap_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, struct exec * const ehp);
+int ap_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -244,7 +244,7 @@ void ap_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 ### Synchronous multi-shot parameterised execution on default backend
 
 ```C
-void smp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS);
+int smp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -259,7 +259,7 @@ void smp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const c
 ### Asynchronous multi-shot parameterised execution on default backend
 
 ```C
-void amp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, struct exec * const ehp);
+int amp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -275,7 +275,7 @@ void amp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const c
 ### Synchronous one-shot parameterised execution on specified backend
 
 ```C
-void sbp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE);
+int sbp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -290,7 +290,7 @@ void sbp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const c
 ### Asynchronous one-shot parameterised execution on specified backend
 
 ```C
-void abp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE, struct exec * const ehp);
+int abp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -306,7 +306,7 @@ void abp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const c
 ### Synchronous multi-shot parameterised execution on specified backend
 
 ```C
-void smb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
+int smb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -323,7 +323,7 @@ void smb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const c
 ### Asynchronous multi-shot parameterised execution on specified backend
 
 ```C
-void amb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
+int amb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -345,7 +345,7 @@ void amb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const c
 This function immediately synchronises an execution, including any classical data which may have already been produced. For example, if on return of `sync_qrun` the number of completed shots is 3, then the first `3 * NMEASURE` entries of the `cstate` array supplied to the executor should contain valid data on the _host_.
 
 ```C
-void sync_qrun(struct exec * const ehp);
+int sync_qrun(struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -358,7 +358,7 @@ void sync_qrun(struct exec * const ehp);
 This function returns only when the device has completed execution. The execution handle and related `cstate` arrays are guaranteed to be synchronised to the host on return of this function.
 
 ```C
-void wait_qrun(struct exec * const ehp);
+int wait_qrun(struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -368,7 +368,7 @@ void wait_qrun(struct exec * const ehp);
 ### Synchronise and end execution
 
 ```C
-void halt_qrun(struct exec * const ehp);
+int halt_qrun(struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |

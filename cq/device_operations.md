@@ -1,6 +1,6 @@
 # CQ device operations
 
-Device operations are valid _within_ a quantum kernel.
+Device operations are valid _within_ a quantum kernel. Implementers are encouraged to use the return values for error handling.
 
 ## Resource management
 
@@ -9,7 +9,7 @@ Device operations are valid _within_ a quantum kernel.
 We assume only classical states can be prepared trivially.
 
 ```C
-void set_qubit(qubit qh, cstate cs);
+int set_qubit(qubit qh, cstate cs);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -20,7 +20,7 @@ void set_qubit(qubit qh, cstate cs);
 ### Set qubit register using unsigned integer
 
 ```C
-void set_qureg(const unsigned long long STATE_IDX, const size_t N, qubit * qrp);
+int set_qureg(const unsigned long long STATE_IDX, const size_t N, qubit * qrp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -32,7 +32,7 @@ void set_qureg(const unsigned long long STATE_IDX, const size_t N, qubit * qrp);
 ### Set qubit register using cstate
 
 ```C
-void set_qureg_cstate(cstate const * const CRP, const size_t N, qubit * qrp);
+int set_qureg_cstate(cstate const * const CRP, const size_t N, qubit * qrp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -49,7 +49,7 @@ void set_qureg_cstate(cstate const * const CRP, const size_t N, qubit * qrp);
 Forces the quantum device to cease execution and return to the host.
 
 ```C
-void abort(const unsigned int STATUS);
+int abort(const unsigned int STATUS);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -66,7 +66,7 @@ The results of device measurements can be used by the **quantum** device, but ar
 ### Qubit measurement
 
 ```C
-void dmeasure_qubit(qubit * qbp, cstate * csp);
+int dmeasure_qubit(qubit * qbp, cstate * csp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -77,7 +77,7 @@ void dmeasure_qubit(qubit * qbp, cstate * csp);
 ### Full qubit register measurement
 
 ```C
-void dmeasure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
+int dmeasure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -89,7 +89,7 @@ void dmeasure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
 ### Partial qubit register measurement
 
 ```C
-void dmeasure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, const size_t NTARGETS, cstate * cr);
+int dmeasure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, const size_t NTARGETS, cstate * cr);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -107,7 +107,7 @@ The results of host measurements are stored in `cstate` buffers passed to the ex
 ### Qubit measurement
 
 ```C
-void measure_qubit(qubit * qbp, cstate * csp);
+int measure_qubit(qubit * qbp, cstate * csp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -118,7 +118,7 @@ void measure_qubit(qubit * qbp, cstate * csp);
 ### Full qubit register measurement
 
 ```C
-void measure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
+int measure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -130,7 +130,7 @@ void measure_qureg(qubit * qr, const size_t NQUBITS, cstate * cr);
 ### Partial qubit register measurement
 
 ```C
-void measure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, const size_t NTARGETS, cstate * cr);
+int measure(qubit * qr, const size_t NQUBITS, size_t const * const TARGETS, const size_t NTARGETS, cstate * cr);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -156,7 +156,7 @@ U(\theta, \phi, \lambda) = \frac{1}{2}
 ```
 
 ```C
-void unitary(qubit * qh, const double THETA, const double PHI, const double LAMBDA);
+int unitary(qubit * qh, const double THETA, const double PHI, const double LAMBDA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -177,7 +177,7 @@ G(\theta) =
 ```
 
 ```C
-void gphase(qubit * qh, const double THETA);
+int gphase(qubit * qh, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -196,7 +196,7 @@ P(\theta) =
 ```
 
 ```C
-void phase(qubit * qh, const double THETA);
+int phase(qubit * qh, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -215,7 +215,7 @@ void phase(qubit * qh, const double THETA);
 ```
 
 ```C
-void paulix(qubit * qh);
+int paulix(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -233,7 +233,7 @@ void paulix(qubit * qh);
 ```
 
 ```C
-void pauliy(qubit * qh);
+int pauliy(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -251,7 +251,7 @@ void pauliy(qubit * qh);
 ```
 
 ```C
-void pauliz(qubit * qh);
+int pauliz(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -269,7 +269,7 @@ H = \frac{1}{\sqrt{2}}
 ```
 
 ```C
-void hadamard(qubit * qh);
+int hadamard(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -287,7 +287,7 @@ S =
 ```
 
 ```C
-void sqrtz(qubit * qh);
+int sqrtz(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -305,7 +305,7 @@ S^{\dagger} =
 ```
 
 ```C
-void sqrtzhc(qubit * qh);
+int sqrtzhc(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -323,7 +323,7 @@ T =
 ```
 
 ```C
-void sqrts(qubit * qh);
+int sqrts(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -341,7 +341,7 @@ T^{\dagger} =
 ```
 
 ```C
-void sqrtshc(qubit * qh);
+int sqrtshc(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -359,7 +359,7 @@ SX = \frac{1}{2}
 ```
 
 ```C
-void sqrtx(qubit * qh);
+int sqrtx(qubit * qh);
 ```
 
 | Parameter | Datatype | Notes |
@@ -377,7 +377,7 @@ R_{x}(\theta) =
 ```
 
 ```C
-void rotx(qubit * qh, const double THETA);
+int rotx(qubit * qh, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -396,7 +396,7 @@ R_{y}(\theta) =
 ```
 
 ```C
-void roty(qubit * qh, const double THETA);
+int roty(qubit * qh, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -416,7 +416,7 @@ R_{z}(\theta) =
 ```
 
 ```C
-void rotz(qubit * qh, const double THETA);
+int rotz(qubit * qh, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -427,7 +427,7 @@ void rotz(qubit * qh, const double THETA);
 ### Controlled X
 
 ```C
-void cpaulix(qubit * ctrl, qubit * target);
+int cpaulix(qubit * ctrl, qubit * target);
 ```
 
 | Parameter | Datatype | Notes |
@@ -438,7 +438,7 @@ void cpaulix(qubit * ctrl, qubit * target);
 ### Controlled Y
 
 ```C
-void cpauliy(qubit * ctrl, qubit * target);
+int cpauliy(qubit * ctrl, qubit * target);
 ```
 
 | Parameter | Datatype | Notes |
@@ -449,7 +449,7 @@ void cpauliy(qubit * ctrl, qubit * target);
 ### Controlled Z
 
 ```C
-void cpauliz(qubit * ctrl, qubit * target);
+int cpauliz(qubit * ctrl, qubit * target);
 ```
 
 | Parameter | Datatype | Notes |
@@ -460,7 +460,7 @@ void cpauliz(qubit * ctrl, qubit * target);
 ### Controlled Phase
 
 ```C
-void cphase(qubit * ctrl, qubit * target, const double THETA);
+int cphase(qubit * ctrl, qubit * target, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -472,7 +472,7 @@ void cphase(qubit * ctrl, qubit * target, const double THETA);
 ### Controlled X Rotation
 
 ```C
-void crotx(qubit * ctrl, qubit *  target, const double THETA);
+int crotx(qubit * ctrl, qubit *  target, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -484,7 +484,7 @@ void crotx(qubit * ctrl, qubit *  target, const double THETA);
 ### Controlled Y Rotation
 
 ```C
-void croty(qubit * ctrl, qubit *  target, const double THETA);
+int croty(qubit * ctrl, qubit *  target, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -496,7 +496,7 @@ void croty(qubit * ctrl, qubit *  target, const double THETA);
 ### Controlled Z Rotation
 
 ```C
-void crotz(qubit * ctrl, qubit *  target, const double THETA);
+int crotz(qubit * ctrl, qubit *  target, const double THETA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -508,7 +508,7 @@ void crotz(qubit * ctrl, qubit *  target, const double THETA);
 ### Controlled Hadamard
 
 ```C
-void chadamard(qubit * ctrl, qubit * target);
+int chadamard(qubit * ctrl, qubit * target);
 ```
 
 | Parameter | Datatype | Notes |
@@ -519,7 +519,7 @@ void chadamard(qubit * ctrl, qubit * target);
 ### Controlled U Gate
 
 ```C
-void cunitary(qubit * ctrl, qubit * target, const double THETA, const double PHI, const double LAMBDA);
+int cunitary(qubit * ctrl, qubit * target, const double THETA, const double PHI, const double LAMBDA);
 ```
 
 | Parameter | Datatype | Notes |
@@ -533,7 +533,7 @@ void cunitary(qubit * ctrl, qubit * target, const double THETA, const double PHI
 ### Swap
 
 ```C
-void swap(qubit * a, qubit * b);
+int swap(qubit * a, qubit * b);
 ```
 
 | Parameter | Datatype | Notes |
@@ -544,7 +544,7 @@ void swap(qubit * a, qubit * b);
 ### Double Controlled X
 
 ```C
-void ccpaulix(qubit * ctrl_a, qubit * ctrl_b, qubit * target);
+int ccpaulix(qubit * ctrl_a, qubit * ctrl_b, qubit * target);
 ```
 
 | Parameter | Datatype | Notes |
@@ -556,7 +556,7 @@ void ccpaulix(qubit * ctrl_a, qubit * ctrl_b, qubit * target);
 ### Controlled Swap
 
 ```C
-void cswap(qubit * ctrl, qubit * a, qubit * b);
+int cswap(qubit * ctrl, qubit * a, qubit * b);
 ```
 
 | Parameter | Datatype | Notes |
