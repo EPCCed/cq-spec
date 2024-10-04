@@ -4,7 +4,7 @@ A specification for C-like interfaces to quantum computers.
 
 ## What is CQ?
 
-CQ is a specification for a C-like interface to quantum computers. It is _not_ a library, or a DSL, or a framework, but you could use it to implement such things. In fact you are encouraged to do so. 
+CQ is a specification for a C-like interface to quantum computers. It is _not_ a library, or a DSL, or a framework, but you could use it to implement such things. In fact you are encouraged to do so. CQ specifically assumes a host-device model, where the host is a stricly classical computer, and the device is... well, also a classical computer, but one which directly controls a quantum computer.
 
 Although the interface is C-like, we don't insist that implementations are written in C. You could certainly write a compatible implementation in C++, or even in python or Fortran (if you must).
 
@@ -30,8 +30,8 @@ For simplicity we do not include any namespace in the specification, but in line
 
 - cq: The core CQ specification, for interfacing with quantum hardware.
   - datatypes: Basic and complex datatypes which should be provided by a CQ implementation.
-  - executors: Functions which offload quantum computations.
-  - functions: Functions which act on CQ datatypes.
+  - host_operations: Operations which are valid on the host, but _not_ the device. Mainly focused on resource management and offloading.
+  - device_operations: Functions which are valid on the quantum device. This is where all the quantum stuff lives.
 
 ## Roadmap
 
