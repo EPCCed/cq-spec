@@ -306,7 +306,7 @@ int abp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 ### Synchronous multi-shot parameterised execution on specified backend
 
 ```C
-int smb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
+int smbp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -323,7 +323,7 @@ int smb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const cr
 ### Asynchronous multi-shot parameterised execution on specified backend
 
 ```C
-int amb_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
+int ambp_qrun(pqkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
@@ -372,4 +372,5 @@ int halt_qrun(struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
 | `ehp`     | `struct exec * const` | Out | A pointer to a CQ execution handle. On return of the function the handle struct _and_ related `cstate` arrays will be synchronised between device and host. This function also guarantees that the execution on the device had completed. It will attempt to actively end execution rather than waiting for completion. |
