@@ -426,24 +426,141 @@ void rotz(qubit * qh, const double THETA);
 
 ### Controlled X
 
+```C
+void cpaulix(qubit * ctrl, qubit * target);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the X gate is applied. |
+
 ### Controlled Y
+
+```C
+void cpauliy(qubit * ctrl, qubit * target);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the Y gate is applied. |
 
 ### Controlled Z
 
+```C
+void cpauliz(qubit * ctrl, qubit * target);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the Z gate is applied. |
+
 ### Controlled Phase
+
+```C
+void cphase(qubit * ctrl, qubit * target, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the phase gate is applied. |
+| `THETA`   | `const double` | The angle of the phase rotation, $\theta$. |
 
 ### Controlled X Rotation
 
+```C
+void crotx(qubit * ctrl, qubit *  target, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the X rotation gate is applied. |
+| `THETA`   | `const double` | The angle of the rotation, $\theta$. |
+
 ### Controlled Y Rotation
+
+```C
+void croty(qubit * ctrl, qubit *  target, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the Y rotation gate is applied. |
+| `THETA`   | `const double` | The angle of the rotation, $\theta$. |
 
 ### Controlled Z Rotation
 
+```C
+void crotz(qubit * ctrl, qubit *  target, const double THETA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the Z rotation gate is applied. |
+| `THETA`   | `const double` | The angle of the rotation, $\theta$. |
+
 ### Controlled Hadamard
+
+```C
+void chadamard(qubit * ctrl, qubit * target);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`  | `qubit *` | The qubit to which the Hadmard gate is applied. |
 
 ### Controlled U Gate
 
+```C
+void cunitary(qubit * ctrl, qubit * target, const double THETA, const double PHI, const double LAMBDA);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `target`      | `qubit *` | The qubit to which the U gate is applied. |
+| `THETA` | `const double` | The angle of the phase, $\theta$. |
+| `PHI` | `const double` | The angle of the phase, $\phi$. |
+| `LAMBDA` | `const double` | The angle of the phase, $\lambda$. |
+
 ### Swap
+
+```C
+void swap(qubit * a, qubit * b);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `a`       | `qubit *` | One of the qubits to be swapped. |
+| `b`       | `qubit *` | One of the qubits to be swapped. |
 
 ### Double Controlled X
 
+```C
+void ccpaulix(qubit * ctrl_a, qubit * ctrl_b, qubit * target);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl_a`  | `qubit *` | The first control qubit. |
+| `ctrl_b`  | `qubit *` | The second control qubit. |
+| `target`  | `qubit *` | The qubit on which the X gate will be appllied. |
+
 ### Controlled Swap
+
+```C
+void cswap(qubit * ctrl, qubit * a, qubit * b);
+```
+
+| Parameter | Datatype | Notes |
+| --------- | -------- | ----- |
+| `ctrl`    | `qubit *` | The control qubit. |
+| `a`       | `qubit *` | One of the qubits to be swapped. |
+| `b`       | `qubit *` | One of the qubits to be swapped. |
