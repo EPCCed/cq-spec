@@ -20,26 +20,26 @@ int set_qubit(qubit qh, cstate cs);
 ### Set qubit register using unsigned integer
 
 ```C
-int set_qureg(const unsigned long long STATE_IDX, const size_t N, qubit * qrp);
+int set_qureg(qubit * qrp, const unsigned long long STATE_IDX, const size_t N);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
+| `qrp`     | `qubit * ` | Out    | The qubit register which should be prepared in a classical state. |
 | `STATE_IDX` | `const unsigned long long` | In | Converted to an `N`-bit binary number, which is then used to set the qubit register. |
 | `N`       | `const size_t` | In | The number of qubits in `qrp`. Should be equal `sizeof(qrp)/sizeof(qubit)`. |
-| `qrp`     | `qubit * ` | Out    | The qubit register which should be prepared in a classical state. |
 
 ### Set qubit register using cstate
 
 ```C
-int set_qureg_cstate(cstate const * const CRP, const size_t N, qubit * qrp);
+int set_qureg_cstate(qubit * qrp, cstate const * const CRP, const size_t N);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
+| `qrp`     | `qubit * ` | Out    | The qubit register which should be prepared in a classical state. |
 | `CRP`     | `cstate const * const` | In   | An array of classical states in which the quantum register should be prepared. |
 | `N`       | `const size_t` | In     | The number of qubits in `qrp` and classical states in `CRP`. Should be equal to `sizeof(qrp)/sizeof(qubit)` _and_ `sizeof(crp)/sizeof(cstate)`. |
-| `qrp`     | `qubit * ` | Out    | The qubit register which should be prepared in a classical state. |
 
 
 ## Control
