@@ -8,6 +8,10 @@ CQ is a specification for a C-like interface to quantum computers. It is _not_ a
 
 Although the interface is C-like, we don't insist that implementations are written in C. You could certainly write a compatible implementation in C++, or even in python or Fortran (if you must).
 
+<center>
+<img src="img/CQ_HostDevice.png" alt="A diagram of the Host-Device model assumed by CQ. A classical data connection exists between the classical Host, and the classical Device coprocessor." width=40%>
+</center>
+
 ## Why?
 
 There are really two questions to answer here.
